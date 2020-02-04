@@ -33,7 +33,7 @@ RUN apt-get update && \
     curl -o ioncube_loaders_lin_x86-64.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz && \
     tar xvfz ioncube_loaders_lin_x86-64.tar.gz && \
     cp -r ioncube/*.so /usr/local/lib/php/extensions/no*/ && \
-    cd /usr/local/etc/php/ && echo zend_extension = /usr/local/lib/php/extensions/no*/ioncube_loader_lin_7.1.so >> php.ini
+    cd /usr/local/etc/php/ && echo zend_extension = /usr/local/lib/php/extensions/no*/ioncube_loader_lin_7.0.so >> php.ini
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
