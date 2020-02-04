@@ -7,12 +7,6 @@ ENV VT_VERSION="7.1.0" \
     COMPOSER_ALLOW_SUPERUSER="1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
-#install ioncube
-RUN wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-RUN tar xvfz ioncube_loaders_lin_x86-64.tar.gz
-RUN ["bin/bash", "-c", "cp -r ioncube/*.so /usr/lib/php/2*/"]
-RUN ["bin/bash", "-c", "cd /etc/php/7*/apache2/conf.d && echo zend_extension = /usr/lib/php/2*/ioncube_loader_lin_7.1.so > 00-ioncube.ini"]
-
 COPY php.ini /usr/local/etc/php/
 COPY vtiger.json .symvol /usr/src/vtiger/
 COPY vtiger-ssl.* /etc/apache2/ssl/
@@ -35,6 +29,12 @@ RUN apt-get update && \
     a2enmod ssl && a2enmod rewrite && \
     apt-get clean && php composer clearcache && \
     rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
+
+#install ioncube
+RUN curl http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+RUN tar xvfz ioncube_loaders_lin_x86-64.tar.gz
+RUN ["bin/bash", "-c", "cp -r ioncube/*.so /usr/lib/php/2*/"]
+RUN ["bin/bash", "-c", "cd /etc/php/7*/apache2/conf.d && echo zend_extension = /usr/lib/php/2*/ioncube_loader_lin_7.1.so > 00-ioncube.ini"]
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
