@@ -34,6 +34,12 @@ COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/
 
+#install ioncube
+RUN wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+RUN tar xvfz ioncube_loaders_lin_x86-64.tar.gz
+RUN ["bin/bash", "-c", "cp -r ioncube/*.so /usr/lib/php/2*/"]
+RUN ["bin/bash", "-c", "cd /etc/php/7*/apache2/conf.d && echo zend_extension = /usr/lib/php/2*/ioncube_loader_lin_7.1.so > 00-ioncube.ini"]
+#RUN service apache2 restart
 RUN chmod +x /usr/local/bin/vtiger-*.sh && \
     vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
     symvol move /var/www/html /usr/src/vtiger/volume
