@@ -15,7 +15,7 @@ COPY 000-default.conf /etc/apache2/sites-available/
 WORKDIR /usr/src/vtiger
 
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog zip unzip && \
+    apt-get install --no-install-recommends -y libzip-dev zlib1g-dev libc-client-dev libkrb5-dev cron rsyslog zip unzip && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap exif mysqli pdo pdo_mysql zip && \
     curl -o composer -sL https://getcomposer.org/composer.phar && \
