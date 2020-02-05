@@ -1,9 +1,9 @@
-FROM php:7.1-apache
+FROM php:7.3.12-apache
 LABEL maintainer="Francesco Bianco <info@javanile.org>"
 
 ENV VT_VERSION="7.1.0" \
     VT_DOWNLOAD="http://sourceforge.net/projects/vtigercrm/files/vtiger%20CRM%207.1.0/Core%20Product/vtigercrm7.1.0.tar.gz" \
-    DATABASE_PACKAGE="mariadb-server-10.1" \
+    DATABASE_PACKAGE="mariadb-server-10.3" \
     COMPOSER_ALLOW_SUPERUSER="1" \
     PATH="/root/.composer/vendor/bin:$PATH"
 
@@ -28,18 +28,17 @@ RUN apt-get update && \
     mv .symvol /var/www/html && mkdir -p /usr/src/vtiger/volume /var/lib/vtiger && \
     a2enmod ssl && a2enmod rewrite && \
     apt-get clean && php composer clearcache && \
-    rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.* && \
+    rm -rf composer /tmp/* /var/tmp/* /var/lib/apt/lists/* /etc/cron.*
     #install ioncube
     curl -o ioncube_loaders_lin_x86-64.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz && \
     tar xvfz ioncube_loaders_lin_x86-64.tar.gz && \
     cp -r ioncube/*.so /usr/local/lib/php/extensions/no*/ && \
-    cd /usr/local/etc/php/ && echo zend_extension = /usr/local/lib/php/extensions/no*/ioncube_loader_lin_7.1.so >> php.ini
+    cd /usr/local/etc/php/ && echo zend_extension = /usr/local/lib/php/extensions/no*/ioncube_loader_lin_7.2.so >> php.ini
 
 COPY vtiger-*.sh /usr/local/bin/
 COPY vtiger-*.php /usr/src/vtiger/
 COPY crontab /etc/cron.d/
 
-#RUN service apache2 restart
 RUN chmod +x /usr/local/bin/vtiger-*.sh && \
     vtiger-install.sh --install-mysql --assert-mysql --dump --patch --remove-mysql && \
     symvol move /var/www/html /usr/src/vtiger/volume
